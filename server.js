@@ -6,11 +6,14 @@ const bodyParser = require('body-parser');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html')
 })
 let urlDB = [];
+
 app.post('/api/shorturl', (req, res) => {
     
     const original_url = req.body.url;
