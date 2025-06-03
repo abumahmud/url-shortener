@@ -17,7 +17,7 @@ app.post('/api/shorturl', (req, res) => {
     try {
         const urlObj = new URL(original_url);
         const short_url = urlDB.length + 1;
-        urlArray.push({original_url, short_url})
+        urlDB.push({original_url, short_url})
         res.json({original_url, short_url})
     } 
     catch (err) {
@@ -28,7 +28,7 @@ app.post('/api/shorturl', (req, res) => {
 
 app.get('/api/shorturl/:shorturl', (req, res) => {
     const shortUrl = Number(req.params.shorturl);
-    const found = urlArray.find((entry) => entry.short_url === shortUrl);
+    const found = urlDB.find((entry) => entry.short_url === shortUrl);
     if (found) {
         res.redirect(found.original_url)
     }
