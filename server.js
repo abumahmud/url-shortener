@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const dns = require('dns');
+const urlParser = require('url'); 
+
 const bodyParser = require('body-parser');
 
 app.use(cors());
@@ -21,15 +24,30 @@ app.post('/api/shorturl', (req, res) => {
     const original_url = req.body.url;
     try {
         const urlObj = new URL(original_url);
+        if (urlObj.protocol !== 'http:' && urlObj.protocol !== 'https:') {
+            throw new Error('Invalid protocol');
+        }
+
+        const host = urlObj.hostname;
+
+        dns.lookup(host, (err, address) => {
+        if (err) {
+            return res.json({ error: 'invalid url' });
+        }
+
         const short_url = urlDB.length + 1;
         urlDB.push({original_url, short_url})
         res.json({original_url, short_url})
-    } 
+        })
+    }
+
     catch (error) {
         res.json({ error: 'invalid url' });
     }
        
-})
+}
+
+)
 
 app.get('/api/shorturl/:shorturl', (req, res) => {
     const shortUrl = Number(req.params.shorturl);
