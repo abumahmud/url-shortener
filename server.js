@@ -20,7 +20,7 @@ app.post('/api/shorturl', (req, res) => {
         urlDB.push({original_url, short_url})
         res.json({original_url, short_url})
     } 
-    catch (err) {
+    catch (error) {
         res.json({ error: 'invalid url' });
     }
        
